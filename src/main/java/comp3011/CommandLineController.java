@@ -4,7 +4,9 @@
  * 
  * Authors:
  *   1. Simon Ratcliffe, in collaboration with GPT-5.6 Terra
- *   2. <student name and student number insert here upon modification>
+ *   2. Raghav Sharma, a1907402
+ *   
+ *   
  *
  * Copyright 2026 Simon Ratcliffe
  */
@@ -25,6 +27,7 @@ import java.util.List;
  */
 public class CommandLineController {
     private final String[] args;
+    private final List<FrameProcessor> frameProcessors = new ArrayList<>();
 
     private boolean helpRequested;
     private boolean audioRequested;
@@ -68,14 +71,21 @@ public class CommandLineController {
         return maximiseRequested;
     }
 
+    public List<FrameProcessor> getFrameProcessors() {
+        return List.copyOf(frameProcessors);
+    }
+
     public boolean shouldLaunchApplication() {
         return errorMessage == null && videoFile != null;
     }
 
     private void parse() {
         List<String> videoFiles = new ArrayList<>();
-        for (String arg : args) {
-            if ("-h".equals(arg) || "--help".equals(arg)) {
+        for (String arg : expandStackedOptions(args)) {
+            FrameEffectOption effect = FrameEffectOption.fromArgument(arg);
+            if (effect != null) {
+                frameProcessors.add(effect.create());
+            } else if ("-h".equals(arg) || "--help".equals(arg)) {
                 helpRequested = true;
             } else if ("-a".equals(arg) || "--audio".equals(arg)) {
                 audioRequested = true;
@@ -107,6 +117,20 @@ public class CommandLineController {
         }
     }
 
+    private static List<String> expandStackedOptions(String[] args) {
+        List<String> expanded = new ArrayList<>();
+        for (String arg : args) {
+            if (arg.length() > 2 && arg.startsWith("-") && !arg.startsWith("--")) {
+                for (int i = 1; i < arg.length(); i++) {
+                    expanded.add("-" + arg.charAt(i));
+                }
+            } else {
+                expanded.add(arg);
+            }
+        }
+        return expanded;
+    }
+
     private void setDisplayId(int displayId) {
         if (this.displayId != null && this.displayId != displayId) {
             errorMessage = "Only one display option can be used";
@@ -124,5 +148,13 @@ public class CommandLineController {
         System.out.println("  -x, --maximise     Open the player maximised");
         System.out.println("  -1, --monitor-1    Open the player on display 1");
         System.out.println("  -2, --monitor-2    Open the player on display 2");
+        System.out.println();
+        System.out.println("Frame processors:");
+        for (FrameEffectOption option : FrameEffectOption.values()) {
+            System.out.println(option.helpLine());
+        }
+        System.out.println("Frame processors are applied in command-line order and may be repeated.");
+        System.out.println("Example: -nssnfwyvdjmbp numbers, scratches twice, numbers again, flickers,");
+        System.out.println("converts, warms, vignettes, dusts, jitters, mottles, bleeds, then peppers.");
     }
 }
