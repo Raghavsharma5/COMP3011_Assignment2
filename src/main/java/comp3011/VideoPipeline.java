@@ -2,6 +2,7 @@
  * Authors:
  *   Raghav SHarma
  *   a1907402
+ *   assisted by Claude (Anthropic); reviewed and tested by the author.
  */
 package comp3011;
 
@@ -30,8 +31,8 @@ import javafx.scene.image.Image;
  * </p>
  */
 public class VideoPipeline {
-    private static final int STAGE_QUEUE_CAPACITY = 2;
-    private static final int DISPLAY_QUEUE_CAPACITY = 6;
+    private static final int STAGE_QUEUE_CAPACITY = 3;
+    private static final int DISPLAY_QUEUE_CAPACITY = 8;
 
     private final List<Thread> threads = new ArrayList<>();
     private final BlockingQueue<PipelineItem> displayQueue = new ArrayBlockingQueue<>(DISPLAY_QUEUE_CAPACITY);

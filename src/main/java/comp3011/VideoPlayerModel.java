@@ -5,6 +5,7 @@
  * Authors:
  *   1. Simon Ratcliffe, in collaboration with GPT-5.6 Terra
  *   2. Raghav Sharma, a1907402
+ *   assisted by Claude (Anthropic); reviewed and tested by the author.
  *
  * Copyright 2026 Simon Ratcliffe
  */
@@ -40,7 +41,7 @@ public class VideoPlayerModel {
     private static final long NO_SEEK_REQUEST = -1; // Sentinel value used when no seek position is active.
     private static final long FIVE_SECONDS_US = 5_000_000L;
     private static final long AUDIO_LEAD_NS = 30_000_000L;
-    private static final long PREROLL_NS = 200_000_000L;
+    private static final long PREROLL_NS = 500_000_000L;
 
     private final List<FrameProcessor> frameProcessors;
     private final Queue<PendingAudio> pendingAudio = new ConcurrentLinkedQueue<>();

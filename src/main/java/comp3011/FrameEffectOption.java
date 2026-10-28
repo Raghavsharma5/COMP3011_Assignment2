@@ -1,12 +1,23 @@
 /*
  * Authors:
- *   Raghav Sharma
- *   a1907402
+ *   1. Raghav Sharma, a1907402
+ *
+ *assisted by Claude (Anthropic); reviewed and tested by the author.
  */
 package comp3011;
 
 import java.util.function.Supplier;
 
+/**
+ * The single registry of command-line frame effects.
+ *
+ * <p>
+ * To add a new effect: write a {@link FrameProcessor} subclass with a no-argument constructor, then add ONE constant
+ * below with its short flag, long name, help text and constructor reference. {@link CommandLineController} parses
+ * options and prints the help text from this enum, so nothing else needs editing. Each occurrence of an option calls
+ * the factory again, so a repeated option such as {@code -ss} gets independent processor instances.
+ * </p>
+ */
 public enum FrameEffectOption {
     NUMBER('n', "number-frames", "Render the frame number onto each frame", FrameNumberer::new),
     SCRATCH('s', "scratch-frames", "Render vertical film scratches", FrameScratcher::new),

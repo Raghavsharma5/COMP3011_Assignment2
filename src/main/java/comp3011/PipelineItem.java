@@ -2,6 +2,7 @@
  * Authors:
  *   Raghav Sharma
  *   a1907402
+ *   assisted by Claude (Anthropic); reviewed and tested by the author.
  */
 package comp3011;
 
